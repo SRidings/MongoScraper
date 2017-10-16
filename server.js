@@ -1,137 +1,50 @@
-//dependencies
+// Dependencies
 var express = require("express");
 var bodyParser = require("body-parser");
 var logger = require("morgan");
 var mongoose = require("mongoose");
-var exphbs = require("express-handlebars");
+var port = process.env.PORT || 3000;
 
-// scraping nodes
-var request = require("request");
-var cheerio = require("cheerio");
-
-//require models
-var Note = require("./models/Notes.js");
-var Article = require("./models/Article.js");
-
-//set mongoose.promise to any Promise implementation
+// Set mongoose to leverage built in JavaScript ES6 Promises
 mongoose.Promise = Promise;
 
-//initialize express
+// Initialize Express
 var app = express();
 
-//set port
-const PORT = 3000;
-
+// Use morgan body parser with the app
 app.use(logger("dev"));
-app.use(
-  bodyParser.urlencoded({
-    extended: false
-  })
-);
+app.use(bodyParser.urlencoded({
+  extended: false
+}));
 
-app.use(bodyParser.urlencoded({ extended: false }));
-app.engine("handlebars", exphbs({ defaultLayout: "main" }));
-app.set("view engine", "handlebars");
-
+// Make public a static dir
 app.use(express.static("public"));
 
-//create connection
+// Database configuration with mongoose
 mongoose.connect("mongodb://localhost/MongooseScraper");
 var db = mongoose.connection;
 
-//error catch
-db.on("error", function(error){
-  console.log(`Mongoose Error: ${error}`);
+// Show any mongoose errors
+db.on("error", function(error) {
+  console.log("Mongoose Error: ", error);
 });
 
-db.once("open", function(){
-  console.log(`Mongoose connection to ${db} is successful.`);
-})
+// Once logged in to the db through mongoose, log a success message
+db.once("open", function() {
+  console.log("Mongoose connection successful.");
+});
 
-//ROUTES
-app.get("/", function(req, res){
-  Article.find({}, function(error, doc){
-    if(error){
-      console.log(error);
-    } else {
-      res.json(doc);
-    }
-  })
-}); //end "/" route
+// Set handlebars
+var exphbs = require("express-handlebars");
 
-app.get("/scrape", function(req, res){
-  //grab body of html with request
-  request("http://www.theonion.com/"), function(error, response, html){
+app.engine("handlebars", exphbs({ defaultLayout: "main" }));
+app.set("view engine", "handlebars");
 
-    //initialize cheerio (with the html body) with $ for shorthand
-    var $ = cheerio.load(html);
+// Import routes and give the server access to them.
+var routes = require("./controller/onionController.js");
+app.use("/", routes);
 
-    //grab every h2 within an article element tag
-    $("article").each(function(i, element){
-
-      console.log(element);
-
-      var result = {};
-
-      result.url = $(element)
-        .children("a")
-        .attr("href");
-
-      console.log(result.url);
-
-      result.headline = $(element)
-        .children(".info")
-        .children(".inner")
-        .children()
-        .children(".headline")
-        .children()
-        .text();
-
-      console.log(result.headline);
-
-      result.summary = $(element)
-        .children(".info")
-        .children(".inner")
-        .children(".desc")
-        .text();
-
-      console.log(result.summary);
-
-      var entry = new Article(result);
-
-      console.log(entry);
-
-      entry.save(function(err, doc){
-        if(err){
-          console.log(err);
-        } else {
-          console.log(doc);
-        }
-    }); //end save to database
-  }); // end .each function
-}; //end request
-
-  //tell browser scrape is done
-  res.send("Scrape Complete");
-
-}); //end /scrape route
-
-
-// app.get("/scrape", function(req, res){
-//   request("http://www.theonion.com/"), function(error, response, html){
-//
-//     var $ = cheerio.load(html);
-//
-//     $("article.desc").each(function(j, elem){
-//
-//       result.summary = $(this).
-//
-//     })
-//   }
-// })
-
-
-//app listener event
-app.listen(PORT, function(){
-  console.log(`App running on port ${PORT}`);
-})
+// Listen on port 3000
+app.listen(port, function() {
+  console.log(`App running on port ${port}`);
+});

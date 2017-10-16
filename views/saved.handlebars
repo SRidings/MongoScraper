@@ -1,0 +1,42 @@
+{{> jumbotron}}
+
+<div class="panel panel-default">
+  <div class="panel-heading text-center">
+    Saved Articles
+  </div>
+</div>
+
+<ul id="articles">
+{{#each articles}}
+ {{#if this.saved}}
+ <div class="container">
+   <div class="row">
+     <div class="col-md-12">
+       <div class="panel panel-default">
+         <div class="panel-heading">Current Onion Articles</div>
+         <div class="panel-body">
+           <p><strong>Title:</strong> {{this.headline}} {{this.photo}}</p>
+           <p><strong>URL:</strong> <a href="http://www.theonion.com/{{this.url}}" target="_blank">http://www.theonion.com{{this.url}}</a></p>
+           <p><strong>Summary:</strong> {{this.summary}}</p>
+           <p><strong>Notes:</strong> {{this.note}}</p>
+             {{#if this.note}}
+              <button class="delete-articles-note-btn" data-id="{{this.note._id}}">x</button>{{this.note.body}}
+             {{/if}}</p>
+             <form>
+               <div class="panel panel-default">
+                 <div class="panel-body">
+                   <textarea type="text" class="textAreaInput" action="/articles" name="noteForm" placeholder="Enter a note" method="post"></textarea>
+                 </div>
+               </div>
+               <button type="submit" data-id="{{this._id}}" class="btn btn-success savenote">Submit Note</button>
+               <button type="submit" data-id="{{this._id}}" class="btn btn-info save-btn">Save Article</button>
+               <button type="submit" data-id="{{this._id}}" class="btn btn-danger delete-btn">Delete Article</button>
+             </form>
+           </div>
+         </div>
+       </div>
+     </div>
+  </div>
+ {{/if}}
+{{/each}}
+</ul>

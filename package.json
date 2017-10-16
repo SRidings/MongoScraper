@@ -18,10 +18,12 @@
   "homepage": "https://github.com/DizDonut/MongoScraper#readme",
   "dependencies": {
     "body-parser": "^1.18.2",
+    "bootstrap3-dialog": "^1.35.4",
     "cheerio": "^1.0.0-rc.2",
     "express": "^4.16.2",
     "express-handlebars": "^3.0.0",
     "mongoose": "^4.12.1",
+    "mongoose-unique-validator": "^1.0.6",
     "morgan": "^1.9.0",
     "request": "^2.83.0"
   }

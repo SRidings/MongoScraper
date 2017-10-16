@@ -1,5 +1,19 @@
+.jumbotron {
+  background: url("../images/newspapers.jpg") no-repeat center center fixed;
+  -webkit-backgroun-size: cover;
+  -moz-background-size: cover;
+  -o-backgroun-size: cover;
+  background-size: auto;
+}
+
 body {
-  background-repeat: no-repeat;
+  background: url("../images/background2.jpg") no-repeat center center fixed;
+  -webkit-backgroun-size: cover;
+  -moz-background-size: cover;
+  -o-backgroun-size: cover;
   background-size: cover;
-  background-image: url("../images/newspapers.jpg");
+}
+
+textarea {
+  width: 100%;
 }
