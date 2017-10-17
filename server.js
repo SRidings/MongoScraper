@@ -20,8 +20,19 @@ app.use(bodyParser.urlencoded({
 // Make public a static dir
 app.use(express.static("public"));
 
+
 // Database configuration with mongoose
-mongoose.connect("mongodb://localhost/MongooseScraper");
+//----Define local MongoDB URI----//
+var databaseURI = "mongodb://localhost/MongooseScraper";
+
+if(process.env.MONGODB_URI){
+  mongoose.connect(process.env.MONGODB_URI);
+} else {
+  mongoose.connect(databaseURI);
+}
+
+//-----End database configuration----//
+
 var db = mongoose.connection;
 
 // Show any mongoose errors
