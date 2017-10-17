@@ -8,6 +8,8 @@ var cheerio = require("cheerio");
 //express router ---> CRUD
 var router = express.Router();
 
+var methodOverride = require("method-override");
+
 //require modles
 var Article = require("../models/Article.js");
 var Note = require("../models/Notes.js");
@@ -96,6 +98,10 @@ router.get("/articles", function(req, res){
   });
 }); //end "/" route
 
+/*
+  NOTES ROUTES
+*/
+
 //route that will post our note to the database
 router.post("/articles/:id", function(req, res){
   //create instance of Note model and assign to variable newNote
@@ -119,6 +125,22 @@ router.post("/articles/:id", function(req, res){
   }) //end save
 }) //end note post route
 
+//route to find the note by the id and delete it
+router.get("/articles/note/delete/:id", function(req, res){
+  Article.findByIdAndRemove(req.params.id, function(err, note){
+    if (err) {
+      console.log(err);
+    } else {
+      console.log("note deleted");
+      res.send(200);
+    }
+  })
+}); //end route to delete the note
+
+/*
+  SAVED ARTICLE ROUTES
+*/
+
 //route that will add the article to our saved article list
 router.post("/articles/put/:id", function(req, res){
   //use article's ObjectId to find and udpate the saved status
@@ -129,8 +151,9 @@ router.post("/articles/put/:id", function(req, res){
       res.send(article);
     }
   })
-})
+}) //end article route to save article
 
+//route to get the saved articles
 router.get("/saved", function(req, res){
   Article.find({ "saved": true}).populate("note").exec(function(error, articles){
     if (error) {
@@ -139,8 +162,7 @@ router.get("/saved", function(req, res){
       res.render("saved", {articles});
     }
   })
-})
+}) //end route to save articles
 
-// }) //end router
 
 module.exports = router;

@@ -14,9 +14,9 @@
              <p><strong>Title:</strong> {{this.headline}} {{this.photo}}</p>
              <p><strong>URL:</strong> <a href="http://www.theonion.com/{{this.url}}" target="_blank">http://www.theonion.com{{this.url}}</a></p>
              <p><strong>Summary:</strong> {{this.summary}}</p>
-             <p><strong>Notes:</strong> {{this.note}}</p>
+             <p><strong>Notes:</strong> {{this.note.body}}</p>
                {{#if this.note}}
-                <button class="delete-articles-note-btn" data-id="{{this.note._id}}">x</button>{{this.note.body}}
+                <button class="btn btn-danger delete-articles-note-btn" data-id="{{this.note._id}}">x</button>  {{this.note.body}}
                {{/if}}</p>
                <form>
                  <div class="panel panel-default">

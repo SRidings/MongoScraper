@@ -30,29 +30,9 @@ $(document).on("click", ".save-btn", function(event) {
       window.location = "/articles";
     });
 
+    // TODO: check functionality of this
     BootstrapDialog.show({
       message: "Article saved!"
-    });
-});
-
-// Click function that unsaves the selected article
-$(document).on("click", ".unsave-btn", function(event) {
-  event.preventDefault();
-  // Grab the id associated with the article from the submit button
-  var thisId = $(this).attr("data-id");
-  // Run a POST request to change the note, using what's entered in the inputs
-  $.ajax({
-    method: "PUT",
-    url: "/saved/put/" + thisId,
-    data: {
-        saved: true
-      }
-    })
-    // With that done
-    .done(function(data) {
-      // Log the response
-
-      window.location = "/saved";
     });
 });
 
@@ -68,7 +48,7 @@ $(document).on("click", ".delete-btn", function(event) {
     })
       // With that done
       .done(function(data) {
-        // Log the response
+
 
         window.location = "/articles";
       });
@@ -129,7 +109,7 @@ $(document).on("click", ".delete-articles-note-btn", function(event) {
 
   // Run a POST request to delete the note
   $.ajax({
-    method: "POST",
+    method: "GET",
     url: "/articles/note/delete/" + thisId
   })
     // With that done
@@ -137,25 +117,5 @@ $(document).on("click", ".delete-articles-note-btn", function(event) {
       // Log the response
       console.log(data);
       window.location = "/articles";
-    });
-});
-
-// TODO:
-// Click function that deletes the note from the saved page
-$(document).on("click", ".delete-saved-note-btn", function(event) {
-  event.preventDefault();
-  // Grab the id associated with the note from the submit button
-  var thisId = $(this).attr("data-id");
-
-  // Run a POST request to delete the note
-  $.ajax({
-    method: "POST",
-    url: "/saved/note/delete/" + thisId
-  })
-    // With that done
-    .done(function(data) {
-      // Log the response
-      console.log(data);
-      window.location = "/saved";
     });
 });
