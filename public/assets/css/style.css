@@ -17,3 +17,8 @@ body {
 textarea {
   width: 100%;
 }
+
+#jumbo-title{
+  font-weight: bold;
+  color: orangered;
+}
